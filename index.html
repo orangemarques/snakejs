@@ -1,4 +1,14 @@
-<canvas id="mainScreen" width="640" height="480"></canvas>
+<html>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+</style>
+<body>
+    <canvas id="mainScreen" width="640" height="480"></canvas>
+</body>
+</html>
 
 <script>
     let px = 42; 
@@ -7,6 +17,7 @@
     let p2y = 240;
     let xv = yv = 0;
     let x2v = y2v = 0;
+    let score = 0;
     let ctx = null;
 
     let tailCount = 0;
@@ -19,10 +30,11 @@
         ctx.fillRect(0, 0, 640, 480);
 
         ctx.fillStyle = "black";
-        ctx.fillRect(7, 7, 625, 465);
+        ctx.fillRect(7, 20, 625, 450);
 
         plotFood();
         plotTail();
+        scoreDraw(0);
 
         document.addEventListener("keydown", keyPush);
         xv = 6;
@@ -35,7 +47,7 @@
         result = Math.floor(Math.random() * (max - min)) + min;
 
         if (result % 6 != 0) {
-            for (i = 0; i < 7; i++) {
+            for (i = 0; i < 6; i++) {
                 result++;
 
                 if (result % 6 == 0) {
@@ -45,6 +57,18 @@
         } 
 
         return result;
+    }
+
+    function scoreDraw(scoreValue) {
+        score += scoreValue;
+
+        ctx.fillStyle = "green";
+        ctx.fillRect(0, 0, 640, 20);
+
+        ctx.fillStyle = "black";
+        var lineHeight = 15;
+        var drawTextOutY = 16;
+        ctx.fillText("score: " + score,10,drawTextOutY);
     }
 
     function game() {
@@ -61,6 +85,7 @@
         }
 
         if (p[0] == 255 && p[1] == 0 && p[2] == 0) {
+            scoreDraw(10);
             plotFood();
             tailCount = 6;
         }
@@ -118,9 +143,9 @@
     function plotFood() {
         ctx.fillStyle = "red";
 
-        //for (let i=0; i<3; i++) {
-        ctx.fillRect(getRandomInt(50, 600), getRandomInt(40, 470), 6, 6);
-        //}
+        for (let i=0; i<3; i++) {
+            ctx.fillRect(getRandomInt(50, 600), getRandomInt(40, 470), 6, 6);
+        }
     }
 
     function keyPush(evt) {
